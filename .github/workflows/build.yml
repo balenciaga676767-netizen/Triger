@@ -1,0 +1,26 @@
+name: Build ColorBot
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install customtkinter keyboard pyautogui pyinstaller
+
+      - name: Build exe
+        run: pyinstaller --onefile --noconsole --uac-admin --collect-all customtkinter --name ColorBot colorbot_gui.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ColorBot
+          path: dist/ColorBot.exe
